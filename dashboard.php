@@ -1,51 +1,92 @@
+<?php
+$conn = mysqli_connect("localhost", "root", "", "climate_db");
+
+$result = mysqli_query($conn, "SELECT * FROM climate_data ORDER BY id DESC LIMIT 1");
+
+$data = mysqli_fetch_assoc($result);
+
+$temp = $data['temperature'] ?? 0;
+$hum  = $data['humidity'] ?? 0;
+
+$tempPercent = ($temp / 50) * 100;
+$humPercent  = $hum;
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <title>Live Sensor</title>
+    <meta http-equiv="refresh" content="2">
+
     <style>
-        h1{
-            color:black;
+        body{
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card{
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 15px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .label{
+            margin: 15px 0 5px;
+        }
+
+        .bar-box{             cvnccccccccccccccccc
+            background: #334155;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .bar{
+            height: 25px;
+            line-height: 25px;
+            color: white;
+            font-weight: bold;
+            border-radius: 20px;
+            transition: width 1s ease-in-out;
+        }
+
+        .temp{
+            background: linear-gradient(to right, #ff4d4d, #ff0000);
+        }
+
+        .hum{
+            background: linear-gradient(to right, #38bdf8, #0ea5e9);
         }
     </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="6">
-    <title>Document</title>
-    
 </head>
-<body bgcolor=pink>
-    <center>
-        <h1>WELCOME TO DOGGY AI SHITT</h1>
-        <h2>BRAZZERS DOGGY</h2>
-        <table border=3px table:table-hover>
-            <th>id</th>
-            <th>distance</th>
-            <th>created_at</th>
-            <th>action</th>
-            <?php
-         include "connect.php";
 
+<body>
 
-         $result=$conn->query("SELECT * FROM zoteste");
-         while($row=$result->fetch_assoc()){
-            echo "<tr>
-            <td>{$row['id']}</td>
-            <td>{$row['distance']}</td>
-            <td>{$row['created_at']}</td>
-            <td><a href='delete.php?id=" .$row['id']."';
-            onclick=\"return confirm('delete this user?');\">delete
-            </td>
-            </a>
-                        </tr>";
+<div class="card">
+    <h2>🌡️ Live Sensor</h2>
 
-             
-             
+    <div class="label">Temperature: <?php echo $temp; ?>°C</div>
+    <div class="bar-box">
+        <div class="bar temp" style="width: <?php echo $tempPercent; ?>%">
+            <?php echo $temp; ?>°C
+        </div>
+    </div>
 
+    <div class="label">Humidity: <?php echo $hum; ?>%</div>
+    <div class="bar-box">
+        <div class="bar hum" style="width: <?php echo $humPercent; ?>%">
+            <?php echo $hum; ?>%
+        </div>
+    </div>
 
-         }
+</div>
 
-?>
-        </table>
-    </center>
-    
 </body>
 </html>
